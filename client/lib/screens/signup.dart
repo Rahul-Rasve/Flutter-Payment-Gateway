@@ -33,14 +33,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
             if (state is SignUpSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("Sign Up Success: Please login"),
+                  content: Text("Sign Up Successfull! Please login"),
+                  showCloseIcon: true,
                 ),
               );
-              Navigator.pop(context);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/login',
+                (route) => false,
+              );
             } else if (state is SignUpFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.error),
+                  showCloseIcon: true,
                 ),
               );
             }

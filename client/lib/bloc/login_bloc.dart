@@ -62,10 +62,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           await api.loginUser(event.email, event.password);
       if (reponse.resultStatus == ResultStatus.success) {
         emit(LoginSuccess());
+      } else {
+        emit(LoginFailure(error: reponse.message));
       }
-      emit(LoginFailure(error: reponse.message));
     } catch (e) {
-      emit(LoginFailure(error: e.toString()));
+      emit(const LoginFailure(error: "Error fetching response"));
     }
   }
 }

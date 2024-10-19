@@ -33,7 +33,7 @@ class ApiClient {
     } catch (e) {
       debugPrint(e.toString());
       apiResponse.resultStatus = ResultStatus.failure;
-      apiResponse.message = e.toString();
+      apiResponse.message = "Error fetching response";
       return apiResponse;
     }
   }
@@ -47,8 +47,8 @@ class ApiClient {
     };
     final ApiResponse apiResponse = ApiResponse();
     try {
-      final Response reponse = await dio.post("/auth/aignup", data: payload);
-      if (reponse.statusCode == 200) {
+      final Response reponse = await dio.post("/auth/signup", data: payload);
+      if (reponse.statusCode == 201) {
         apiResponse.resultStatus = ResultStatus.success;
         apiResponse.message = reponse.data["message"];
         apiResponse.responseData = reponse.data["data"];
@@ -60,7 +60,7 @@ class ApiClient {
     } catch (e) {
       debugPrint(e.toString());
       apiResponse.resultStatus = ResultStatus.failure;
-      apiResponse.message = e.toString();
+      apiResponse.message = "Error fetching response";
       return apiResponse;
     }
   }

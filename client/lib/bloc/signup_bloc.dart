@@ -71,7 +71,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         emit(SignUpFailure(error: response.message));
       }
     } catch (e) {
-      emit(SignUpFailure(error: e.toString()));
+      emit(const SignUpFailure(error: "Error fetching response"));
     }
   }
 }

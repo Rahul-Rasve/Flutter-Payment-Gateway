@@ -34,18 +34,21 @@ class _LoginScreenState extends State<LoginScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Login Success"),
+                  showCloseIcon: true,
                 ),
               );
-              Navigator.pushReplacement(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                   builder: (_) => const HomeScreen(),
                 ),
+                (route) => false,
               );
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.error),
+                  showCloseIcon: true,
                 ),
               );
             }
