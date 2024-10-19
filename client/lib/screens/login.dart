@@ -1,5 +1,8 @@
+import 'package:client/bloc/login_bloc.dart';
+import 'package:client/screens/home.dart';
 import 'package:client/screens/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,66 +12,127 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController(text: "");
+    _passwordController = TextEditingController(text: "");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Login",
-                style: TextStyle(fontSize: 30, color: Colors.black),
-              ),
-              const SizedBox(height: 25),
-              const TextField(
-                key: Key("Email-Field"),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  hintText: "Enter your Email",
-                  border: OutlineInputBorder(),
+      body: BlocProvider(
+        create: (context) => LoginBloc(),
+        child: BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              debugPrint("Login Success");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Login Success"),
                 ),
-              ),
-              const SizedBox(height: 25),
-              const TextField(
-                key: Key("Password-Field"),
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  hintText: "Enter your Password",
-                  border: OutlineInputBorder(),
+              );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HomeScreen(),
                 ),
-              ),
-              const SizedBox(height: 25),
-              ElevatedButton(
-                key: const Key("Login-Button"),
-                onPressed: () {
-                  debugPrint("Login Button Pressed");
-                },
-                child: const Text("Login"),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account?"),
-                  TextButton(
-                    key: const Key("Register-Button"),
-                    onPressed: () {
-                      debugPrint("Register Button Pressed");
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const SignUpScreen()));
-                    },
-                    child: const Text("Register"),
-                  ),
-                ],
-              )
-            ],
+              );
+            } else if (state is LoginFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                ),
+              );
+            }
+          },
+          child: BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Login",
+                      style: TextStyle(fontSize: 30, color: Colors.black),
+                    ),
+                    const SizedBox(height: 25),
+                    TextField(
+                      key: const Key("Email-Field"),
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                        labelText: "Email",
+                        hintText: "Enter your Email",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+                    TextField(
+                      key: const Key("Password-Field"),
+                      controller: _passwordController,
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: "Password",
+                        hintText: "Enter your Password",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+                    state is LoginLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            key: const Key("Login-Button"),
+                            onPressed: () {
+                              debugPrint("Login Button Pressed");
+                              final String email = _emailController.text;
+                              final String password = _passwordController.text;
+
+                              if (email.isEmpty || password.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("All fields are required"),
+                                  ),
+                                );
+                              } else {
+                                BlocProvider.of<LoginBloc>(context).add(
+                                  LoginButtonPressed(
+                                    email: email,
+                                    password: password,
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text("Login"),
+                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Don't have an account?"),
+                        TextButton(
+                          key: const Key("Register-Button"),
+                          onPressed: () {
+                            debugPrint("Register Button Pressed");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const SignUpScreen()));
+                          },
+                          child: const Text("Register"),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
