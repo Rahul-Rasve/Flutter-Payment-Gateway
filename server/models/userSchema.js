@@ -11,6 +11,11 @@ const User = mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		portfolio: {
+			type: String,
+			required: true,
+			default: "0",
+		},
 		password: {
 			type: String,
 			required: true,

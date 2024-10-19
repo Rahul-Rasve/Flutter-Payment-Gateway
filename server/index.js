@@ -22,6 +22,7 @@ app.use(express.json());
 
 //routes
 app.use("/api/user/auth", require("./routes/UserRoutes"));
+app.use("/api/user/payment", require("./routes/PaymentRoutes"));
 
 //declare port
 app.listen(process.env.PORT, () => {
