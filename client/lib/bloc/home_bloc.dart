@@ -1,4 +1,5 @@
 import 'package:client/api/api_client.dart';
+import 'package:client/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,10 +12,9 @@ abstract class HomeEvent extends Equatable {
 }
 
 class HomeLoading extends HomeEvent {
-  final String name;
-  final String portfolio;
+  final UserModel user;
 
-  const HomeLoading({required this.name, required this.portfolio});
+  const HomeLoading({required this.user});
 }
 
 //-------------STATES
@@ -27,7 +27,14 @@ abstract class HomeState extends Equatable {
 
 class HomeInitial extends HomeState {}
 
-class HomeLoaded extends HomeState {}
+class HomeLoaded extends HomeState {
+  final UserModel user;
+
+  const HomeLoaded({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
 
 class HomeLoadingFailure extends HomeState {
   final String error;
@@ -48,7 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     try {
-      
+      emit(HomeLoaded(user: event.user));
     } catch (e) {
       emit(const HomeLoadingFailure(error: "Error fetching response"));
     }
