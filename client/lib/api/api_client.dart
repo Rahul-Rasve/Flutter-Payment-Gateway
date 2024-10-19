@@ -24,7 +24,7 @@ class ApiClient {
       if (reponse.statusCode == 200) {
         apiResponse.resultStatus = ResultStatus.success;
         apiResponse.message = reponse.data["message"];
-        apiResponse.responseData = reponse.data["data"];
+        apiResponse.responseData = reponse.data["user"];
       } else {
         apiResponse.resultStatus = ResultStatus.failure;
         apiResponse.message = reponse.data["message"];

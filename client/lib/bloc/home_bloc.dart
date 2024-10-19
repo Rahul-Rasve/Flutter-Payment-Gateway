@@ -1,3 +1,4 @@
+import 'package:client/api/api_client.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,10 +41,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeLoading>(_onHomeLoading);
   }
 
+  final ApiClient api = ApiClient();
+
   Future<void> _onHomeLoading(
     HomeLoading event,
     Emitter<HomeState> emit,
   ) async {
-    emit(HomeLoaded());
+    try {
+      
+    } catch (e) {
+      emit(const HomeLoadingFailure(error: "Error fetching response"));
+    }
   }
 }

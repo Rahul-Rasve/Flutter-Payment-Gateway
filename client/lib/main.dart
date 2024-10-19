@@ -1,3 +1,4 @@
+import 'package:client/bloc/home_bloc.dart';
 import 'package:client/bloc/login_bloc.dart';
 import 'package:client/bloc/signup_bloc.dart';
 import 'package:client/screens/home.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SignUpBloc>(
           create: (context) => SignUpBloc(),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(),
         ),
       ],
       child: MaterialApp(
