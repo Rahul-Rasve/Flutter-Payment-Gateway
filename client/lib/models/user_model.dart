@@ -8,7 +8,7 @@ class UserModel {
   UserModel.fromJson(Map<String, dynamic> json) {
     name = json['name'] ?? "";
     email = json['email'] ?? "";
-    portfolio = json['portfolio'] ?? "";
+    portfolio = json['portfolio'] ?? "0";
   }
 
   Map<String, dynamic> toJson() {

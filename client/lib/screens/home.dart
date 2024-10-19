@@ -48,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Portfolio : ${widget.user?.portfolio} rupees",
                 style: const TextStyle(fontSize: 20),
               ),
+              const SizedBox(height: 200),
             ],
           ),
         ),
