@@ -46,23 +46,26 @@ class LoginFailure extends LoginState {
 
 //-------------------BLOC
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial());
+  LoginBloc() : super(LoginInitial()) {
+    on<LoginButtonPressed>(_onLoginButtonPressed);
+  }
 
   final ApiClient api = ApiClient();
 
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginButtonPressed) {
-      yield LoginLoading();
-      try {
-        final ApiResponse reponse =
-            await api.loginUser(event.email, event.password);
-        if (reponse.resultStatus == ResultStatus.success) {
-          yield LoginSuccess();
-        }
-        yield LoginFailure(error: reponse.message);
-      } catch (e) {
-        yield LoginFailure(error: e.toString());
+  Future<void> _onLoginButtonPressed(
+    LoginButtonPressed event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(LoginLoading());
+    try {
+      final ApiResponse reponse =
+          await api.loginUser(event.email, event.password);
+      if (reponse.resultStatus == ResultStatus.success) {
+        emit(LoginSuccess());
       }
+      emit(LoginFailure(error: reponse.message));
+    } catch (e) {
+      emit(LoginFailure(error: e.toString()));
     }
   }
 }

@@ -3,8 +3,8 @@ import 'package:client/api/api_client.dart';
 import 'package:client/models/api_response.dart';
 import 'package:equatable/equatable.dart';
 
-//-------------------EVENTS
-abstract class SignUpEvent extends Equatable{
+//-----------EVENT
+abstract class SignUpEvent extends Equatable {
   const SignUpEvent();
 
   @override
@@ -17,13 +17,13 @@ class SignUpButtonPressed extends SignUpEvent {
   final String password;
 
   const SignUpButtonPressed({
-    required String name,
+    required this.name,
     required this.email,
     required this.password,
   });
 }
 
-//-------------------STATES
+//-----------STATES
 abstract class SignUpState extends Equatable {
   const SignUpState();
 
@@ -40,32 +40,38 @@ class SignUpSuccess extends SignUpState {}
 class SignUpFailure extends SignUpState {
   final String error;
 
-  const SignUpFailure({required this.error});
+  const SignUpFailure({
+    required this.error,
+  });
 
   @override
   List<Object> get props => [error];
 }
 
-//-------------------BLOC
+//-----------BLOC
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  SignUpBloc() : super(SignUpInitial());
+  SignUpBloc() : super(SignUpInitial()) {
+    on<SignUpButtonPressed>(_onSignUpButtonPressed);
+  }
 
   final ApiClient api = ApiClient();
 
-  Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
-    if (event is SignUpButtonPressed) {
-      yield SignUpLoading();
-      try {
-        final ApiResponse reponse =
-            await api.SignUpUser(event,name, event.email, event.password);
-        if (reponse.resultStatus == ResultStatus.success) {
-          yield SignUpSuccess();
-          Navigator.pop(context);
-        }
-        yield SignUpFailure(error: reponse.message);
-      } catch (e) {
-        yield SignUpFailure(error: e.toString());
+  Future<void> _onSignUpButtonPressed(
+    SignUpButtonPressed event,
+    Emitter<SignUpState> emit,
+  ) async {
+    emit(SignUpLoading());
+    try {
+      final ApiResponse response =
+          await api.signUpUser(event.name, event.email, event.password);
+
+      if (response.resultStatus == ResultStatus.success) {
+        emit(SignUpSuccess());
+      } else {
+        emit(SignUpFailure(error: response.message));
       }
+    } catch (e) {
+      emit(SignUpFailure(error: e.toString()));
     }
   }
 }
