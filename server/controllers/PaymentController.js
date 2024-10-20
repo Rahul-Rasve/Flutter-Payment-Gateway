@@ -1,5 +1,6 @@
 const Razorpay = require("razorpay");
 const Payment = require("../models/paymentSchema");
+const crypto = require("crypto");
 
 const razorpay = new Razorpay({
 	key_id: process.env.RAZORPAY_KEY_ID,
@@ -9,7 +10,7 @@ const razorpay = new Razorpay({
 const createPaymentOrder = async (req, res) => {
 	try {
 		const options = {
-			amount: req.body.amount * 100,
+			amount: req.body.amount,
 			currency: "INR",
 			receipt: "receipt_" + Date.now(),
 		};
@@ -57,7 +58,7 @@ const verifyPayment = async (req, res) => {
 		}
 
 		await Payment.findOneAndUpdate(
-			{ paymentId: razorpay_payment_id },
+			{ paymentId: razorpay_order_id },
 			{ status: "PAID" }
 		);
 
@@ -66,10 +67,10 @@ const verifyPayment = async (req, res) => {
 			message: "Payment verified successfully",
 		});
 	} catch (error) {
+		console.error("Error verifying payment:", error);
 		return res.status(500).send({
 			success: false,
 			message: "Error verifying payment order",
-			data: error,
 		});
 	}
 };

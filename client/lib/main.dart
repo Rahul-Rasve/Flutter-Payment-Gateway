@@ -1,13 +1,16 @@
 import 'package:client/bloc/home_bloc.dart';
 import 'package:client/bloc/login_bloc.dart';
+import 'package:client/bloc/payment_bloc.dart';
 import 'package:client/bloc/signup_bloc.dart';
 import 'package:client/screens/home.dart';
 import 'package:client/screens/login.dart';
 import 'package:client/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -27,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeBloc>(
           create: (context) => HomeBloc(),
+        ),
+        BlocProvider<PaymentBloc>(
+          create: (context) => PaymentBloc(),
         ),
       ],
       child: MaterialApp(

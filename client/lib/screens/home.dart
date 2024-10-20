@@ -1,4 +1,5 @@
 import 'package:client/bloc/home_bloc.dart';
+import 'package:client/bloc/payment_bloc.dart';
 import 'package:client/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final TextEditingController _amountController;
+
+  @override
+  void initState() {
+    super.initState();
+    _amountController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +58,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 200),
+              TextField(
+                key: const Key("Amout-field"),
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter Amount',
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 20),
+              BlocConsumer<PaymentBloc, PaymentState>(
+                listener: (context, state) {
+                  if (state is PaymentFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Payment Failed!")),
+                    );
+                  } else if (state is PaymentSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Payment Successfull!")),
+                    );
+                  }
+                },
+                builder: (context, state) => state is PaymentLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: () {
+                          context.read<PaymentBloc>().add(
+                                CreatePaymentOrder(
+                                  amount:
+                                      double.tryParse(_amountController.text) ??
+                                          0.0,
+                                  userId: widget.user?.userId ?? "",
+                                ), // Amount in INR
+                              );
+                        },
+                        child: const Text('Pay Now'),
+                      ),
+              )
             ],
           ),
         ),

@@ -64,4 +64,53 @@ class ApiClient {
       return apiResponse;
     }
   }
+
+  Future<ApiResponse> createPayementOrder(double amount, String userId) async {
+    Map<String, dynamic> payload = {
+      "amount": amount,
+      "userId": userId,
+    };
+    final ApiResponse apiResponse = ApiResponse();
+    try {
+      final Response reponse = await dio.post("/payment/order", data: payload);
+      if (reponse.statusCode == 201) {
+        apiResponse.resultStatus = ResultStatus.success;
+        apiResponse.message = reponse.data["message"];
+        apiResponse.responseData = reponse.data["data"];
+      } else {
+        apiResponse.resultStatus = ResultStatus.failure;
+        apiResponse.message = reponse.data["message"];
+      }
+      return apiResponse;
+    } catch (e) {
+      debugPrint(e.toString());
+      apiResponse.resultStatus = ResultStatus.failure;
+      apiResponse.message = "Error fetching response";
+      return apiResponse;
+    }
+  }
+
+  Future<ApiResponse> verifyPayment(Map<String, dynamic> payload) async {
+    final ApiResponse apiResponse = ApiResponse();
+    try {
+      final Response reponse =
+          await dio.post("/payment/verify-payment", data: payload);
+      if (reponse.statusCode == 200) {
+        apiResponse.resultStatus = ResultStatus.success;
+        apiResponse.message = reponse.data["message"];
+        apiResponse.responseData = reponse.data["data"];
+      } else {
+        apiResponse.resultStatus = ResultStatus.failure;
+        apiResponse.message = reponse.data["message"];
+      }
+      return apiResponse;
+    } catch (e) {
+      debugPrint(e.toString());
+      apiResponse.resultStatus = ResultStatus.failure;
+      apiResponse.message = "Error fetching response";
+      return apiResponse;
+    }
+  }
+
+  //end
 }

@@ -43,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 MaterialPageRoute(
                   builder: (_) => HomeScreen(
                     user: UserModel(
+                      userId: state.user.userId,
                       name: state.user.name,
                       email: state.user.email,
                       portfolio: state.user.portfolio,
