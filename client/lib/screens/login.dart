@@ -1,6 +1,7 @@
 import 'package:client/bloc/login_bloc.dart';
 import 'package:client/models/user_model.dart';
 import 'package:client/screens/home.dart';
+import 'package:client/screens/portfolio.dart';
 import 'package:client/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,14 +42,15 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => HomeScreen(
-                    user: UserModel(
-                      userId: state.user.userId,
-                      name: state.user.name,
-                      email: state.user.email,
-                      portfolio: state.user.portfolio,
-                    ),
-                  ),
+                  // builder: (_) => HomeScreen(
+                  //   user: UserModel(
+                  //     userId: state.user.userId,
+                  //     name: state.user.name,
+                  //     email: state.user.email,
+                  //     portfolio: state.user.portfolio,
+                  //   ),
+                  // ),
+                  builder: (_) => PortfolioScreen(userId: state.user.userId),
                 ),
                 (route) => false,
               );

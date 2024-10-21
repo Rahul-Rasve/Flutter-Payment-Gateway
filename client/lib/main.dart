@@ -1,6 +1,7 @@
 import 'package:client/bloc/home_bloc.dart';
 import 'package:client/bloc/login_bloc.dart';
 import 'package:client/bloc/payment_bloc.dart';
+import 'package:client/bloc/portfolio_bloc.dart';
 import 'package:client/bloc/signup_bloc.dart';
 import 'package:client/screens/home.dart';
 import 'package:client/screens/login.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PaymentBloc>(
           create: (context) => PaymentBloc(),
+        ),
+        BlocProvider<PortfolioBloc>(
+          create: (context) => PortfolioBloc(),
         ),
       ],
       child: MaterialApp(

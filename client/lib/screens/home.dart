@@ -53,10 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Name : ${widget.user?.name}",
                 style: const TextStyle(fontSize: 20),
               ),
-              Text(
-                "Portfolio : ₹ ${widget.user?.portfolio}",
-                style: const TextStyle(fontSize: 20),
-              ),
               const SizedBox(height: 200),
               TextFormField(
                   key: const Key("Amout-field"),
