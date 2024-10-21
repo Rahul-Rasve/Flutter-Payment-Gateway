@@ -1,8 +1,14 @@
+import 'package:client/models/user_portfolio_model.dart';
+
 class UserModel {
   String userId = "";
   String name = "";
   String email = "";
-  String portfolio = "";
+  UserPortfolio portfolio = UserPortfolio(
+    amount: 0.0,
+    totalValue: 0.0,
+    goldHoldings: GoldHoldings(),
+  );
 
   UserModel({
     required this.userId,
@@ -11,19 +17,12 @@ class UserModel {
     required this.portfolio,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    userId = json['_id'] ?? "";
-    name = json['name'] ?? "";
-    email = json['email'] ?? "";
-    portfolio = json['portfolio'] ?? "0";
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = userId;
-    data['name'] = name;
-    data['email'] = email;
-    data['portfolio'] = portfolio;
-    return data;
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      userId: json['_id'] ?? "",
+      name: json['name'] ?? "",
+      email: json['email'] ?? "",
+      portfolio: json['portfolio'] ?? "0",
+    );
   }
 }

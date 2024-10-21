@@ -270,7 +270,7 @@ const getPortfolioStats = async (req, res) => {
 
 		const userPorfolio = {
 			amount: user.portfolio,
-			Gold: {
+			goldHoldings: {
 				quantity: user.goldHoldings.quantity,
 				buyPrice: user.goldHoldings.globalPrice,
 				globalPrice: currentGoldPrice,

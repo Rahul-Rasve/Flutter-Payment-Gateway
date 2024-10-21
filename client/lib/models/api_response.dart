@@ -6,9 +6,10 @@ class ApiResponse {
   dynamic responseData;
   String message;
 
-  ApiResponse(
-      {this.resultStatus,
-      this.responseData,
-      this.message = "Unknown",
-      this.headers});
+  ApiResponse({
+    this.resultStatus,
+    this.responseData,
+    this.message = "Unknown",
+    this.headers,
+  });
 }
