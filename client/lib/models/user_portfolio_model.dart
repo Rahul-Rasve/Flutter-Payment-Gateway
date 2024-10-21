@@ -11,9 +11,9 @@ class UserPortfolio {
 
   factory UserPortfolio.fromJson(Map<String, dynamic> json) {
     return UserPortfolio(
-      amount: json['amount'],
+      amount: double.parse(json['amount']?.toString() ?? '0'),
       goldHoldings: GoldHoldings.fromJson(json['goldHoldings']),
-      totalValue: json['total'],
+      totalValue: double.parse(json['total']?.toString() ?? '0'),
     );
   }
 }
@@ -33,10 +33,10 @@ class GoldHoldings {
 
   factory GoldHoldings.fromJson(Map<String, dynamic> json) {
     return GoldHoldings(
-      quantity: json['quantity'],
-      buyPrice: json['buyPrice'],
-      globalPrice: json['globalPrice'],
-      currentValue: json['currentValue'],
+      quantity: double.parse(json['quantity']?.toString() ?? '0'),
+      buyPrice: double.parse(json['buyPrice']?.toString() ?? '0'),
+      globalPrice: double.parse(json['globalPrice']?.toString() ?? '0'),
+      currentValue: double.parse(json['currentValue']?.toString() ?? '0'),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:client/api/interceptor.dart';
 import 'package:client/models/api_response.dart';
+import 'package:client/models/payment_model.dart';
 import 'package:client/models/user_portfolio_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,7 @@ class ApiClient {
     try {
       final Response response = await dio.get(
         "/payment/portfolio-stats",
-        data: {userId: userId},
+        data: {'userId': userId},
       );
       if (response.statusCode == 200) {
         apiResponse.resultStatus = ResultStatus.success;
@@ -146,12 +147,17 @@ class ApiClient {
     try {
       final Response response = await dio.get(
         "/payment/transaction-history",
-        data: {userId: userId},
+        data: {'userId': userId},
       );
       if (response.statusCode == 200) {
         apiResponse.resultStatus = ResultStatus.success;
         apiResponse.message = response.data["message"];
-        apiResponse.responseData = response.data["data"];
+        List<dynamic> dataList = response.data["data"];
+        apiResponse.responseData = dataList
+            .map(
+              (e) => PaymentModel.fromJson(e as Map<String, dynamic>),
+            )
+            .toList();
       } else {
         apiResponse.resultStatus = ResultStatus.failure;
         apiResponse.message = response.data["message"];

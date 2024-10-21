@@ -19,7 +19,21 @@ class PortfolioScreen extends StatelessWidget {
       create: (context) => PortfolioBloc()..add(LoadPortfolio(userId)),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Portfolio'),
+          title: const Text("Portfolio"),
+          centerTitle: true,
+          backgroundColor: Colors.blue,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ],
         ),
         body: BlocConsumer<PortfolioBloc, PortfolioState>(
           listener: (context, state) {
@@ -31,36 +45,50 @@ class PortfolioScreen extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is PortfolioLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state is PortfolioLoaded) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  context.read<PortfolioBloc>().add(LoadPortfolio(userId));
-                },
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _PortfolioSummaryCard(portfolio: state.portfolio),
-                        const SizedBox(height: 16),
-                        _ActionButtons(
-                          userId: userId,
-                        ),
-                        const SizedBox(height: 16),
-                        _GoldHoldingsCard(
-                            goldHoldings: state.portfolio.goldHoldings),
-                        const SizedBox(height: 16),
-                        _RecentTransactions(transactions: state.transactions),
-                      ],
-                    ),
-                  ),
-                ),
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
-            return const Center(child: Text('Something went wrong'));
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<PortfolioBloc>().add(LoadPortfolio(userId));
+              },
+              child: state is PortfolioLoaded
+                  ? SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _PortfolioSummaryCard(portfolio: state.portfolio),
+                            const SizedBox(height: 16),
+                            _ActionButtons(
+                              userId: userId,
+                            ),
+                            const SizedBox(height: 16),
+                            _GoldHoldingsCard(
+                                goldHoldings: state.portfolio.goldHoldings),
+                            const SizedBox(height: 16),
+                            _RecentTransactions(
+                                transactions: state.transactions),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Something went wrong'),
+                        ElevatedButton(
+                          onPressed: () => context
+                              .read<PortfolioBloc>()
+                              .add(LoadPortfolio(userId)),
+                          child: const Text("Refresh"),
+                        ),
+                      ],
+                    )),
+            );
           },
         ),
       ),
