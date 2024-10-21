@@ -22,7 +22,7 @@ class _DepositDialogState extends State<DepositDialog> {
         keyboardType: TextInputType.number,
         decoration: const InputDecoration(
           labelText: 'Amount (₹)',
-          prefixText: '₹',
+          prefixText: '₹ ',
         ),
       ),
       actions: [

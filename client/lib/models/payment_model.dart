@@ -22,12 +22,12 @@ class PaymentModel {
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
     return PaymentModel(
       id: json['_id'],
-      type: json['type'],
-      amount: json['amount'].toDouble(),
-      goldQuantity: json['goldQuantity']?.toDouble(),
-      goldPrice: json['goldPrice']?.toDouble(),
-      status: json['status'],
-      razorpayPaymentId: json['razorpayPaymentId'],
+      type: json['paymentType'],
+      amount: double.parse(json['amount']?.toString() ?? '0'),
+      goldQuantity: double.parse(json['goldQuantity']?.toString() ?? '0'),
+      goldPrice: double.parse(json['goldPrice']?.toString() ?? '0'),
+      status: json['status'] ?? "PENDING",
+      razorpayPaymentId: json['razorpayPaymentId'] ?? "NA",
       createdAt: DateTime.parse(json['createdAt']),
     );
   }

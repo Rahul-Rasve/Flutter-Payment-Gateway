@@ -135,7 +135,7 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
 
       var options = {
         'key': Configure.razorpayKeyId,
-        'amount': orderData['amount'],
+        'amount': orderData['amount'] * 100,
         'name': 'Payment-App',
         'order_id': orderData['razorpayOrderId'],
         'description': 'Portfolio Deposit',

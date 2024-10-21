@@ -18,12 +18,10 @@ const PaymentSchema = new mongoose.Schema(
 		},
 		goldQuantity: {
 			type: Number,
-			required: true,
 			default: 0,
 		},
 		goldPrice: {
 			type: Number,
-			required: true,
 			default: 0,
 		},
 		status: {

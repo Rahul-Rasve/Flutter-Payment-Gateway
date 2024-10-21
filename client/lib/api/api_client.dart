@@ -181,7 +181,7 @@ class ApiClient {
           "userId": userId,
         },
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         apiResponse.resultStatus = ResultStatus.success;
         apiResponse.message = response.data["message"];
         apiResponse.responseData = response.data["data"];

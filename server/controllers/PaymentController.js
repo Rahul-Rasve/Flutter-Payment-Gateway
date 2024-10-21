@@ -63,10 +63,6 @@ const verifyPayment = async (req, res) => {
 			{ status: "PAID", razorpayPaymentId: razorpay_payment_id }
 		);
 
-		await User.findByIdAndUpdate(payment.userId, {
-			$inc: { goldHoldings: payment.amount },
-		});
-
 		return res.status(200).send({
 			success: true,
 			message: "Payment verified successfully",
@@ -92,9 +88,13 @@ const handleDeposits = async (req, res) => {
 
 		const order = await razorpay.orders.create(options);
 
+		const user = await User.findByIdAndUpdate(userId, {
+			$inc: { portfolio: amount },
+		});
+
 		const newPayment = await Payment({
 			userId: userId,
-			type: "DEPOSIT",
+			paymentType: "DEPOSIT",
 			amount: amount,
 			status: "PENDING",
 			razorpayOrderId: order.id,
