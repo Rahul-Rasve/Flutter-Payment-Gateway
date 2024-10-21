@@ -242,7 +242,25 @@ const handleSellGold = async (req, res) => {
 };
 
 const getTransactionHistory = async (req, res) => {
-	
+	try {
+		const { userId } = req.body;
+		const user = await User.findById(userId);
+
+		const payments = await Payment.find({ userId: userId }).sort({
+			createdAt: -1,
+		});
+
+		return res.status(200).send({
+			success: true,
+			message: "Transaction history fetched successfully",
+			data: payments,
+		});
+	} catch (error) {
+		return res.status(500).send({
+			success: false,
+			message: "Error getting transaction history",
+		});
+	}
 };
 
 const getPortfolioStats = async (req, res) => {
