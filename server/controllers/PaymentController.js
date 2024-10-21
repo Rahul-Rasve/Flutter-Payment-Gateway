@@ -70,6 +70,7 @@ const verifyPayment = async (req, res) => {
 		return res.status(200).send({
 			success: true,
 			message: "Payment verified successfully",
+			data: payment.userId,
 		});
 	} catch (error) {
 		console.error("Error verifying payment:", error);
