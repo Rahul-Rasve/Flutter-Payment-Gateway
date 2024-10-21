@@ -17,18 +17,15 @@ const UserSchema = mongoose.Schema(
 		},
 		portfolio: {
 			type: Number,
-			required: true,
 			default: 0,
 		},
 		goldHoldings: {
 			quantity: {
 				type: Number,
-				required: true,
 				default: 0,
 			},
-			globalPrice: {
+			buyPrice: {
 				type: Number,
-				required: true,
 				default: 0,
 			},
 		},
