@@ -228,7 +228,7 @@ class _GoldHoldingsCard extends StatelessWidget {
               children: [
                 _GoldInfoItem(
                   label: 'Quantity',
-                  value: '${goldHoldings.quantity.toStringAsFixed(3)} g',
+                  value: '${goldHoldings.quantity.toStringAsFixed(3)} kg',
                 ),
                 _GoldInfoItem(
                   label: 'Avg. Buy Price',

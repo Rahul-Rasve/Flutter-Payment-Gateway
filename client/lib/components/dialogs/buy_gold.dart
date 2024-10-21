@@ -22,7 +22,7 @@ class _BuyGoldDialogState extends State<BuyGoldDialog> {
         keyboardType: TextInputType.number,
         decoration: const InputDecoration(
           labelText: 'Quantity (in grams)',
-          prefixText: 'Gm',
+          prefixText: 'Gm ',
         ),
       ),
       actions: [
