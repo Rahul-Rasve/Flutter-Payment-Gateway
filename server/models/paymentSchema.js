@@ -2,26 +2,41 @@ const mongoose = require("mongoose");
 
 const PaymentSchema = new mongoose.Schema(
 	{
-		paymentId: {
+		userId: {
+			type: mongoose.Schema.ObjectId,
+			ref: "User",
+			required: true,
+		},
+		paymentType: {
 			type: String,
+			enum: ["DEPOSIT", "WITHDRAWAL", "BUY_GOLD", "SELL_GOLD"],
 			required: true,
 		},
 		amount: {
 			type: Number,
 			required: true,
 		},
-		currency: {
-			type: String,
+		goldQuantity: {
+			type: Number,
 			required: true,
+			default: 0,
+		},
+		goldPrice: {
+			type: Number,
+			required: true,
+			default: 0,
 		},
 		status: {
 			type: String,
 			required: true,
+			enum: ["COMPLETED", "FAILED", "PENDING"],
+			default: "PENDING",
 		},
-		userId: {
-			type: mongoose.Schema.ObjectId,
-			ref: "User",
-			required: true,
+		razorpayPaymentId: {
+			type: String,
+		},
+		razorpayOrderId: {
+			type: String,
 		},
 	},
 	{
