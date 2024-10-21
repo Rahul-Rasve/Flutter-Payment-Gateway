@@ -54,19 +54,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: const TextStyle(fontSize: 20),
               ),
               Text(
-                "Portfolio : ${widget.user?.portfolio} rupees",
+                "Portfolio : ₹ ${widget.user?.portfolio}",
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 200),
-              TextField(
-                key: const Key("Amout-field"),
-                controller: _amountController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter Amount',
-                ),
-                keyboardType: TextInputType.number,
-              ),
+              TextFormField(
+                  key: const Key("Amout-field"),
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter Amount',
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a valid amount!";
+                    }
+                    return null;
+                  }),
               const SizedBox(height: 20),
               BlocConsumer<PaymentBloc, PaymentState>(
                 listener: (context, state) {
@@ -84,11 +89,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () {
+                          if (_amountController.text.toString().isEmpty) {
+                            return;
+                          }
+                          double amt =
+                              double.parse(_amountController.text.toString());
                           context.read<PaymentBloc>().add(
                                 CreatePaymentOrder(
-                                  amount:
-                                      double.tryParse(_amountController.text) ??
-                                          0.0,
+                                  amount: amt,
                                   userId: widget.user?.userId ?? "",
                                 ), // Amount in INR
                               );
